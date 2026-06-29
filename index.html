@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slashbar — a command bar for macOS</title>
+<meta name="description" content="Highlight anything, press ⌥Space, type /. Slashbar runs 100+ actions on your Mac and talks to the AI you already pay for. No API keys. No new bill.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBFAF5; --panel:#F3F1E9; --ink:#111110; --soft:#56544D;
+    --line:#E2DFD4; --line-strong:#C9C5B6;
+    --violet:#5B3DF5; --violet-deep:#3A23B8;
+    --dark:#131218; --dark-2:#1B1A22; --glass:#23222C; --on-dark:#EDEBF5; --on-dark-soft:#9A97AD;
+    --max:1180px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Space Grotesk",system-ui,sans-serif; font-weight:400;
+    -webkit-font-smoothing:antialiased; line-height:1.45;
+    background-image:linear-gradient(var(--line) 1px,transparent 1px);
+    background-size:100% 6px; background-position:0 0; /* faint baseline texture, very subtle */
+  }
+  body{background-image:none} /* keep clean; texture handled per-section */
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
+  .slash-accent{color:var(--violet)}
+
+  /* ---------- top bar (mac menu-bar feel) ---------- */
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(251,250,245,.82);
+    backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)}
+  .bar .row{display:flex;align-items:center;gap:26px;height:56px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:18px}
+  .logo .mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#6D5BF8,#A855F7);
+    display:grid;place-items:center;color:#fff;font-weight:700;font-family:"JetBrains Mono",monospace;transform:rotate(0)}
+  .logo .mark span{transform:skewX(-12deg);font-size:15px;margin-top:-1px}
+  nav.top{display:flex;gap:24px;margin-left:auto}
+  nav.top a{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+  nav.top a:hover{color:var(--ink)}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:"JetBrains Mono",monospace;font-size:13px;
+    font-weight:500;padding:9px 15px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    transition:transform .12s ease, box-shadow .12s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 var(--violet)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover{box-shadow:4px 4px 0 var(--ink)}
+  .kbd{font-family:"JetBrains Mono",monospace;font-size:11px;border:1px solid currentColor;border-radius:5px;padding:1px 6px;opacity:.7}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:74px 0 86px}
+  .hero h1{font-size:clamp(44px,6.4vw,86px);line-height:.95;letter-spacing:-.035em;font-weight:700;margin:18px 0 0}
+  .hero h1 .ser{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-style:italic;letter-spacing:-.01em}
+  .hero h1 .big-slash{color:var(--violet);display:inline-block;transform:skewX(-9deg)}
+  .lede{margin:26px 0 0;font-size:19px;line-height:1.55;max-width:34ch;color:#26251f}
+  .lede b{font-weight:500}
+  .cta{display:flex;gap:14px;align-items:center;margin-top:34px;flex-wrap:wrap}
+  .meta{margin-top:18px;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--soft);letter-spacing:.02em}
+  .meta b{color:var(--ink);font-weight:500}
+  /* giant ghost slash behind hero */
+  .ghost-slash{position:absolute;right:-4%;top:-22%;font-size:62vh;line-height:1;font-weight:700;color:transparent;
+    -webkit-text-stroke:2px var(--line-strong);font-family:"Space Grotesk",sans-serif;transform:skewX(-10deg);pointer-events:none;user-select:none;z-index:0}
+
+  /* ---------- the app replica ---------- */
+  .device{position:relative;z-index:2;justify-self:end;width:100%;max-width:430px}
+  .palette{background:rgba(27,26,34,.92);border:1px solid rgba(255,255,255,.09);border-radius:18px;
+    box-shadow:0 30px 70px -28px rgba(38,28,90,.55), 0 2px 0 rgba(255,255,255,.05) inset;
+    backdrop-filter:blur(20px);padding:0;overflow:hidden;color:var(--on-dark)}
+  .pal-field{display:flex;align-items:center;gap:12px;padding:18px 18px 14px}
+  .pal-slash{font-family:"JetBrains Mono",monospace;font-weight:700;font-size:22px;color:#A78BFA;transform:skewX(-8deg)}
+  .pal-input{font-family:"JetBrains Mono",monospace;font-size:16px;color:var(--on-dark)}
+  .caret{display:inline-block;width:2px;height:18px;background:#A78BFA;margin-left:1px;vertical-align:-3px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .pal-divider{height:1px;background:rgba(255,255,255,.08)}
+  .pal-rows{padding:8px}
+  .prow{display:flex;align-items:center;gap:13px;padding:11px 12px;border-radius:11px}
+  .prow .ic{width:30px;height:30px;border-radius:8px;background:rgba(167,139,250,.16);display:grid;place-items:center;
+    font-family:"JetBrains Mono",monospace;color:#C4B5FD;font-size:14px;flex:none}
+  .prow .tt{font-size:14.5px;font-weight:500}
+  .prow .ss{font-size:12px;color:var(--on-dark-soft);margin-top:1px}
+  .prow .tag{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--on-dark-soft);border:1px solid rgba(255,255,255,.12);padding:2px 7px;border-radius:20px}
+  .prow.sel{background:linear-gradient(90deg,rgba(124,92,246,.22),rgba(124,92,246,.06))}
+  .prow.sel .tag{color:#C4B5FD;border-color:rgba(167,139,250,.4)}
+  .pal-foot{display:flex;align-items:center;gap:10px;padding:11px 16px;border-top:1px solid rgba(255,255,255,.08);
+    font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--on-dark-soft)}
+  .badge{display:inline-flex;align-items:center;gap:6px;color:#C4B5FD}
+  .dot{width:6px;height:6px;border-radius:50%;background:#8B5CF6;box-shadow:0 0 8px #8B5CF6}
+  .pal-foot .right{margin-left:auto;display:flex;gap:6px;align-items:center}
+
+  /* ---------- section frame ---------- */
+  section{position:relative}
+  .sec-head{display:flex;align-items:baseline;gap:18px;padding-top:18px}
+  .sec-no{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--violet);font-weight:500}
+  .sec-title{font-size:clamp(26px,3.4vw,40px);letter-spacing:-.03em;font-weight:700;line-height:1.02}
+  .rule{height:1px;background:var(--line);margin:0}
+
+  /* ---------- actions list (editorial, not cards) ---------- */
+  .actions{padding:64px 0 30px}
+  .act-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 64px;margin-top:38px}
+  .act{display:grid;grid-template-columns:auto 1fr;gap:16px;padding:18px 4px;border-top:1px solid var(--line);
+    align-items:start;transition:padding-left .18s ease,background .18s ease}
+  .act:hover{padding-left:12px;background:linear-gradient(90deg,rgba(91,61,245,.05),transparent)}
+  .act .cmd{font-family:"JetBrains Mono",monospace;font-weight:500;font-size:14px;color:var(--violet);white-space:nowrap}
+  .act h3{margin:0;font-size:17px;font-weight:500;letter-spacing:-.01em}
+  .act p{margin:4px 0 0;color:var(--soft);font-size:14px;line-height:1.5}
+  .act .more{display:block;margin-top:34px;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+
+  /* ---------- philosophy ---------- */
+  .creed{background:var(--dark);color:var(--on-dark);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);
+    position:relative;overflow:hidden}
+  .creed .ghost-slash{color:transparent;-webkit-text-stroke:2px rgba(255,255,255,.06);top:-30%;right:2%}
+  .creed .wrap{padding:78px 28px}
+  .creed .eyebrow{color:#A78BFA}
+  .creed .lead{font-size:clamp(28px,3.8vw,46px);line-height:1.08;letter-spacing:-.03em;font-weight:500;max-width:20ch;margin:20px 0 0}
+  .creed .lead .ser{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400;color:#C4B5FD}
+  .tenets{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:64px;position:relative;z-index:2}
+  .tenet{border-top:1px solid rgba(255,255,255,.14);padding-top:18px}
+  .tenet .n{font-family:"JetBrains Mono",monospace;color:#7C6AE0;font-size:13px}
+  .tenet h4{margin:10px 0 8px;font-size:19px;font-weight:500;letter-spacing:-.01em}
+  .tenet p{margin:0;color:var(--on-dark-soft);font-size:14.5px;line-height:1.55}
+
+  /* ---------- marquee ---------- */
+  .strip{border-bottom:1px solid var(--line);overflow:hidden;background:var(--panel)}
+  .strip .lbl{font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--soft);padding:14px 0 0;text-align:center}
+  .track{display:flex;gap:46px;white-space:nowrap;padding:14px 0 18px;animation:slide 34s linear infinite;font-family:"JetBrains Mono",monospace;font-size:15px;color:#3a382f}
+  .track span{opacity:.8}
+  .track span::before{content:"/ ";color:var(--violet)}
+  @keyframes slide{to{transform:translateX(-50%)}}
+
+  /* ---------- closing CTA ---------- */
+  .close{position:relative;overflow:hidden;padding:96px 0 100px;text-align:center}
+  .close .big{font-size:clamp(52px,11vw,150px);line-height:.9;letter-spacing:-.04em;font-weight:700}
+  .close .big .s{color:var(--violet);display:inline-block;transform:skewX(-9deg)}
+  .close p{font-family:"JetBrains Mono",monospace;color:var(--soft);font-size:14px;margin:22px 0 30px}
+  .close .btn{font-size:15px;padding:14px 26px}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0}
+  footer .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  footer .mono{font-size:12.5px;color:var(--soft)}
+  footer nav{margin-left:auto;display:flex;gap:22px}
+  footer nav a{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--soft)}
+  footer nav a:hover{color:var(--ink)}
+
+  @media (max-width:900px){
+    .hero .grid{grid-template-columns:1fr;gap:46px;padding:54px 0 64px}
+    .device{justify-self:start;max-width:420px}
+    .act-grid{grid-template-columns:1fr;gap:0}
+    .tenets{grid-template-columns:1fr;gap:30px}
+    nav.top{display:none}
+    .ghost-slash{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap row">
+    <a class="logo" href="#"><span class="mark"><span>/</span></span> slashbar</a>
+    <nav class="top">
+      <a href="#actions">actions</a>
+      <a href="#how">how it works</a>
+      <a href="#ai">your AI</a>
+      <a href="#download">changelog</a>
+    </nav>
+    <a class="btn" href="#download">Download&nbsp; <span class="kbd">macOS</span></a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="ghost-slash">/</div>
+  <div class="wrap grid">
+    <div>
+      <div class="eyebrow">A command bar for macOS — not a launcher</div>
+      <h1>Start every<br>task with a <span class="big-slash">/</span></h1>
+      <p class="lede">Highlight text anywhere, hit <b>⌥Space</b>, and the right action is already waiting. Format, transform, translate, move windows, drive your apps — <b>and ask the AI you already pay for.</b></p>
+      <div class="cta">
+        <a class="btn" href="/download">Download for macOS</a>
+        <a class="btn ghost" href="#how">See it work &nbsp;→</a>
+      </div>
+      <div class="meta">v0.1 &nbsp;·&nbsp; <b>macOS 14+</b> &nbsp;·&nbsp; Apple&nbsp;Silicon&nbsp;+&nbsp;Intel &nbsp;·&nbsp; notarized &nbsp;·&nbsp; <b>free</b></div>
+    </div>
+
+    <div class="device">
+      <div class="palette">
+        <div class="pal-field">
+          <span class="pal-slash">/</span>
+          <span class="pal-input" id="tw">summarize</span><span class="caret"></span>
+        </div>
+        <div class="pal-divider"></div>
+        <div class="pal-rows">
+          <div class="prow sel">
+            <div class="ic">∑</div>
+            <div><div class="tt">Summarize selection</div><div class="ss">3 sentences · uses your Claude subscription</div></div>
+            <div class="tag">AI</div>
+          </div>
+          <div class="prow">
+            <div class="ic">{}</div>
+            <div><div class="tt">Format JSON</div><div class="ss">pretty-print · sort keys · validate</div></div>
+            <div class="tag">text</div>
+          </div>
+          <div class="prow">
+            <div class="ic">⤢</div>
+            <div><div class="tt">Window → left half</div><div class="ss">tile the frontmost app</div></div>
+            <div class="tag">system</div>
+          </div>
+          <div class="prow">
+            <div class="ic">⌥</div>
+            <div><div class="tt">Translate → Türkçe</div><div class="ss">detected language: English</div></div>
+            <div class="tag">AI</div>
+          </div>
+        </div>
+        <div class="pal-foot">
+          <span class="badge"><span class="dot"></span> on-device · claude</span>
+          <span class="right">run <span class="kbd">↩</span> &nbsp; actions <span class="kbd">⌘K</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="strip">
+  <div class="wrap"><div class="lbl">talks to the apps you already use</div></div>
+  <div class="track">
+    <span>GitHub</span><span>Linear</span><span>Jira</span><span>Notion</span><span>Slack</span><span>Spotify</span><span>Calendar</span><span>Reminders</span><span>Telegram</span><span>Teams</span><span>GitLab</span><span>Homebrew</span>
+    <span>GitHub</span><span>Linear</span><span>Jira</span><span>Notion</span><span>Slack</span><span>Spotify</span><span>Calendar</span><span>Reminders</span><span>Telegram</span><span>Teams</span><span>GitLab</span><span>Homebrew</span>
+  </div>
+</div>
+
+<!-- ACTIONS -->
+<section id="actions" class="actions">
+  <div class="wrap">
+    <div class="sec-head"><span class="sec-no">(01)</span><h2 class="sec-title">A hundred small powers,<br>one keystroke deep.</h2></div>
+    <div class="act-grid">
+      <div class="act"><span class="cmd">/json</span><div><h3>Reshape any text</h3><p>JSON, JWT, Base64, URL, hex, hashes, case, line tools, extract emails & links. It reads what you paste and ranks the right tool first.</p></div></div>
+      <div class="act"><span class="cmd">/ask</span><div><h3>Ask, summarize, rewrite</h3><p>Run a prompt on the selection — summarize, fix tone, explain code, translate — answered by your own AI, not ours.</p></div></div>
+      <div class="act"><span class="cmd">/window</span><div><h3>Move & tile windows</h3><p>Halve, quarter, maximize, throw to the next display. The kind of thing you shouldn't need a second app for.</p></div></div>
+      <div class="act"><span class="cmd">/open</span><div><h3>Launch & search</h3><p>Apps, files, browser history and bookmarks, a quick web search — without lifting your hands off the keys.</p></div></div>
+      <div class="act"><span class="cmd">/clip</span><div><h3>Clipboard with a memory</h3><p>Everything you copied, searchable. Pick an old snippet, transform it, send it on.</p></div></div>
+      <div class="act"><span class="cmd">/send</span><div><h3>Push to your tools</h3><p>File an issue, drop a Slack line, add a reminder, message yourself on Telegram — straight from the bar.</p></div></div>
+    </div>
+    <span class="act more">…and ~100 more. <a class="slash-accent" href="#download">browse the full list →</a></span>
+  </div>
+</section>
+
+<!-- PHILOSOPHY / AI -->
+<section id="ai" class="creed">
+  <div class="ghost-slash">/</div>
+  <div class="wrap">
+    <div class="eyebrow">The part nobody else does</div>
+    <p class="lead">No API keys. No second bill. Slashbar borrows the <span class="ser">AI you already pay for.</span></p>
+    <div class="tenets">
+      <div class="tenet"><div class="n">01</div><h4>Your subscription, your tokens</h4><p>It drives the CLIs you've already logged into — Claude, Codex, Gemini — and falls back to on-device Foundation Models. We never see a prompt.</p></div>
+      <div class="tenet"><div class="n">02</div><h4>Local-first, by default</h4><p>Native SwiftUI. Real window vibrancy, a Carbon global hotkey, no Accessibility prompt. Tokens live in the Keychain. No backend, ever.</p></div>
+      <div class="tenet"><div class="n">03</div><h4>The field is the input</h4><p>Open and your clipboard is already there, ready to act on. Type over it, or press <span class="mono" style="color:#C4B5FD">Tab</span> to search 100+ actions by name.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section id="download" class="close">
+  <div class="wrap">
+    <div class="eyebrow">slashbar.app</div>
+    <div class="big">press <span class="s">/</span></div>
+    <p>macOS 14+ · Apple Silicon &amp; Intel · signed &amp; notarized · 2.4 MB</p>
+    <a class="btn" href="/download">Download Slashbar &nbsp;<span class="kbd">.dmg</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap row">
+    <a class="logo" href="#" style="font-size:16px"><span class="mark" style="width:20px;height:20px"><span style="font-size:13px">/</span></span> slashbar</a>
+    <span class="mono">© 2026 · built for macOS in Swift</span>
+    <nav>
+      <a href="#actions">actions</a>
+      <a href="#ai">philosophy</a>
+      <a href="#">privacy</a>
+      <a href="#">github</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+  // Hero typewriter — cycles through real queries, no framework.
+  const queries = ["summarize this thread","{ format json }","translate to Türkçe","window left half","what's playing?","extract all links"];
+  const el = document.getElementById('tw');
+  let qi = 0, ci = 0, dir = 1;
+  function tick(){
+    const q = queries[qi];
+    ci += dir;
+    el.textContent = q.slice(0, ci);
+    if(ci === q.length){ dir = -1; return setTimeout(tick, 1400); }
+    if(ci === 0){ dir = 1; qi = (qi+1)%queries.length; return setTimeout(tick, 280); }
+    setTimeout(tick, dir>0 ? 62 : 28);
+  }
+  setTimeout(tick, 900);
+
+  // Press "/" anywhere to nudge focus to the download (playful, on-brand).
+  addEventListener('keydown', e=>{ if(e.key === '/' && !/input|textarea/i.test(e.target.tagName)){ e.preventDefault(); document.getElementById('download').scrollIntoView({behavior:'smooth'}); }});
+</script>
+</body>
+</html>
