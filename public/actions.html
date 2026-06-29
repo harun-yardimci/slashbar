@@ -33,8 +33,11 @@
   nav.top{margin-left:auto;display:flex;gap:22px;align-items:center}
   nav.top a{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
   nav.top a:hover{color:var(--ink)}
-  .btn{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:500;padding:8px 14px;border-radius:9px;
-    border:1px solid var(--ink);background:var(--ink);color:var(--paper)}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:"JetBrains Mono",monospace;font-size:13px;
+    font-weight:500;padding:9px 15px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    transition:transform .12s ease, box-shadow .12s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 var(--violet)}
+  .kbd{font-family:"JetBrains Mono",monospace;font-size:11px;border:1px solid currentColor;border-radius:5px;padding:1px 6px;opacity:.7}
   .head{padding:64px 0 22px}
   .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
   h1{font-size:clamp(40px,6vw,72px);line-height:.96;letter-spacing:-.035em;font-weight:700;margin:14px 0 0}
@@ -71,7 +74,7 @@
     <a class="logo" href="/"><span class="mark"><span>/</span></span> slashbar</a>
     <nav class="top">
       <a href="/">home</a>
-      <a class="btn" href="/download">Download</a>
+      <a class="btn" href="/download">Download&nbsp; <span class="kbd">macOS</span></a>
     </nav>
   </div>
 </header>
