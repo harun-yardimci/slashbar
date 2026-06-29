@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Slashbar — a command bar for macOS</title>
 <meta name="description" content="Highlight anything, press ⌥Space, type /. Slashbar runs 100+ actions on your Mac and talks to the AI you already pay for. No API keys. No new bill.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#5B3DF5">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://slashbar.app">
+<meta property="og:title" content="Slashbar — a command bar for macOS">
+<meta property="og:description" content="Highlight anything, press ⌥Space, type /. 100+ actions, plus the AI you already pay for. No keys, no new bill.">
+<meta property="og:image" content="https://slashbar.app/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Slashbar — a command bar for macOS">
+<meta name="twitter:description" content="Highlight anything, press ⌥Space, type /. 100+ actions, plus the AI you already pay for.">
+<meta name="twitter:image" content="https://slashbar.app/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -25,7 +38,7 @@
     background-image:linear-gradient(var(--line) 1px,transparent 1px);
     background-size:100% 6px; background-position:0 0; /* faint baseline texture, very subtle */
   }
-  body{background-image:none} /* keep clean; texture handled per-section */
+  body{background-image:none;overflow-x:hidden} /* keep clean; no horizontal scroll on mobile */
   a{color:inherit;text-decoration:none}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
   .mono{font-family:"JetBrains Mono",ui-monospace,monospace}
@@ -157,6 +170,38 @@
     nav.top{display:none}
     .ghost-slash{display:none}
   }
+  @media (max-width:560px){
+    .wrap{padding:0 22px}
+    .hero h1{font-size:clamp(38px,11.5vw,54px)}
+    .hero .grid{padding:38px 0 50px;gap:36px}
+    .lede{font-size:17px;max-width:none}
+    .device{max-width:100%}
+    .sec-head{flex-direction:column;gap:8px}
+    .act{grid-template-columns:1fr;gap:4px}
+    .act .cmd{font-size:13px}
+    .close{padding:72px 0 76px}
+    .close .big{font-size:clamp(46px,18vw,84px)}
+    .creed .wrap{padding:60px 22px}
+    footer .row{gap:14px}
+    footer nav{margin-left:0;flex-wrap:wrap;gap:16px}
+  }
+
+  /* ---------- dark variant (respects system appearance) ---------- */
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#131217; --panel:#1B1A21; --ink:#ECEAF4; --soft:#9C99AB;
+      --line:#2A2832; --line-strong:#3C3A47; --violet:#8B73FF; --violet-deep:#A78BFA;
+    }
+    header.bar{background:rgba(19,18,23,.82);border-bottom-color:var(--line)}
+    .hero .lede{color:#C9C7D4}
+    .hero .lede b{color:var(--ink)}
+    .btn{background:var(--ink);color:#131217;border-color:var(--ink)}
+    .btn.ghost{background:transparent;color:var(--ink)}
+    .ghost-slash{-webkit-text-stroke-color:var(--line-strong)}
+    .track{color:#C9C7D4}
+    .creed{background:#0C0B10;border-color:#000}
+    .close .big .s,.hero h1 .big-slash,.act .cmd{color:var(--violet-deep)}
+  }
 </style>
 </head>
 <body>
@@ -186,7 +231,7 @@
         <a class="btn" href="/download">Download for macOS</a>
         <a class="btn ghost" href="#how">See it work &nbsp;→</a>
       </div>
-      <div class="meta">v0.1 &nbsp;·&nbsp; <b>macOS 14+</b> &nbsp;·&nbsp; Apple&nbsp;Silicon&nbsp;+&nbsp;Intel &nbsp;·&nbsp; notarized &nbsp;·&nbsp; <b>free</b></div>
+      <div class="meta">v0.1 · <b>macOS&nbsp;14+</b> · <span style="white-space:nowrap">Apple&nbsp;Silicon&nbsp;+&nbsp;Intel</span> · notarized · <b>free</b></div>
     </div>
 
     <div class="device">
@@ -197,7 +242,7 @@
         </div>
         <div class="pal-divider"></div>
         <div class="pal-rows">
-          <div class="prow sel">
+          <div class="prow">
             <div class="ic">∑</div>
             <div><div class="tt">Summarize selection</div><div class="ss">3 sentences · uses your Claude subscription</div></div>
             <div class="tag">AI</div>
@@ -290,19 +335,27 @@
 </footer>
 
 <script>
-  // Hero typewriter — cycles through real queries, no framework.
-  const queries = ["summarize this thread","{ format json }","translate to Türkçe","window left half","what's playing?","extract all links"];
+  // Hero typewriter — types a query AND highlights the result row it maps to.
+  const steps = [
+    { q: "summarize this thread", row: 0 },
+    { q: "{ format json }",       row: 1 },
+    { q: "window left half",      row: 2 },
+    { q: "translate to Türkçe",   row: 3 },
+  ];
   const el = document.getElementById('tw');
-  let qi = 0, ci = 0, dir = 1;
+  const rows = [...document.querySelectorAll('.prow')];
+  const setSel = i => rows.forEach((r,k)=>r.classList.toggle('sel', k===i));
+  let si = 0, ci = 0, dir = 1;
   function tick(){
-    const q = queries[qi];
+    const s = steps[si];
     ci += dir;
-    el.textContent = q.slice(0, ci);
-    if(ci === q.length){ dir = -1; return setTimeout(tick, 1400); }
-    if(ci === 0){ dir = 1; qi = (qi+1)%queries.length; return setTimeout(tick, 280); }
-    setTimeout(tick, dir>0 ? 62 : 28);
+    el.textContent = s.q.slice(0, Math.max(ci,0));
+    if(ci >= s.q.length){ dir = -1; return setTimeout(tick, 1500); }
+    if(ci <= 0){ dir = 1; si = (si+1)%steps.length; setSel(steps[si].row); return setTimeout(tick, 280); }
+    setTimeout(tick, dir>0 ? 60 : 26);
   }
-  setTimeout(tick, 900);
+  setSel(steps[0].row);
+  setTimeout(tick, 800);
 
   // Press "/" anywhere to nudge focus to the download (playful, on-brand).
   addEventListener('keydown', e=>{ if(e.key === '/' && !/input|textarea/i.test(e.target.tagName)){ e.preventDefault(); document.getElementById('download').scrollIntoView({behavior:'smooth'}); }});
