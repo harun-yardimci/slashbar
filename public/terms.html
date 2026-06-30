@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Use · Slashbar</title>
+<meta name="description" content="The terms for using Slashbar — a free, local-first command bar for macOS, provided as-is.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#5B3DF5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#FBFAF5; --ink:#111110; --soft:#56544D; --line:#E2DFD4; --violet:#5B3DF5; --panel:#F3F1E9; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  a{color:var(--violet);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  .col{max-width:720px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(251,250,245,.85);
+    backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)}
+  .bar .row{display:flex;align-items:center;gap:24px;height:56px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:18px;color:var(--ink)}
+  .logo .mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#6D5BF8,#A855F7);
+    display:grid;place-items:center;color:#fff}
+  .logo .mark span{transform:skewX(-12deg);font-family:"JetBrains Mono",monospace;font-size:15px;margin-top:-1px}
+  nav.top{margin-left:auto;display:flex;gap:22px;align-items:center}
+  nav.top a{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+  nav.top a:hover{color:var(--ink);text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:"JetBrains Mono",monospace;font-size:13px;
+    font-weight:500;padding:9px 15px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    transition:transform .12s ease, box-shadow .12s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 var(--violet);text-decoration:none}
+  .head{padding:60px 0 8px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
+  h1{font-size:clamp(36px,5vw,56px);line-height:1;letter-spacing:-.035em;font-weight:700;margin:14px 0 0}
+  h1 .s{color:var(--violet);display:inline-block;transform:skewX(-9deg)}
+  .updated{margin:14px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+  main{padding:18px 0 10px}
+  h2{font-size:21px;font-weight:500;letter-spacing:-.01em;margin:38px 0 6px}
+  p,li{font-size:16px;color:#26251f}
+  ul{padding-left:20px} li{margin:4px 0}
+  .tldr{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:26px 0 0}
+  .tldr p{margin:0}
+  strong{font-weight:500}
+  footer{border-top:1px solid var(--line);margin-top:54px;padding:34px 0}
+  footer .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  footer .mono{font-size:12.5px;color:var(--soft)}
+  footer nav{margin-left:auto;display:flex;gap:20px}
+  footer nav a{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--soft)}
+  footer nav a:hover{color:var(--ink);text-decoration:none}
+  @media (max-width:540px){ .wrap{padding:0 22px} nav.top a:not(.btn){display:none} }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap row">
+    <a class="logo" href="/"><span class="mark"><span>/</span></span> slashbar</a>
+    <nav class="top"><a href="/">home</a><a href="/actions">actions</a><a class="btn" href="/download">Download</a></nav>
+  </div>
+</header>
+
+<div class="wrap col">
+  <div class="head">
+    <div class="eyebrow">Legal</div>
+    <h1>Terms of <span class="s">/</span> Use</h1>
+    <p class="updated">Last updated: 30 June 2026</p>
+  </div>
+
+  <main>
+    <div class="tldr">
+      <p><strong>The short version:</strong> Slashbar is free and provided as-is, with no warranty. Use it at your own risk, follow the terms of any services you connect, and we're not liable for damages. If you don't agree, don't use the app.</p>
+    </div>
+
+    <h2>1. Acceptance</h2>
+    <p>By downloading or using Slashbar (the “app”), you agree to these Terms of Use. If you don't agree, please don't install or use the app. The app is provided by Harun Yardımcı (“we”, “us”).</p>
+
+    <h2>2. License</h2>
+    <p>Slashbar is free to use. We grant you a personal, non-exclusive, non-transferable, revocable license to install and run the app on devices you own or control. The app is licensed, not sold; we retain all rights, title, and interest in it. You may not sell, redistribute, reverse-engineer, or create derivative works from the app except where such restrictions are prohibited by law.</p>
+
+    <h2>3. Your subscriptions and connected services</h2>
+    <p>Slashbar's AI and integration features work through third-party tools and accounts that <strong>you</strong> provide — for example AI command-line tools (Claude, Codex/OpenAI, Gemini) and services like GitHub, Spotify, Google, Microsoft, or Telegram. You are responsible for those accounts, any costs they incur, and for complying with each provider's terms. Your use of them is governed by their agreements, not ours.</p>
+
+    <h2>4. Your responsibilities</h2>
+    <p>You are responsible for the content you process with the app and for using it lawfully. Don't use Slashbar to break the law or to violate the rights or terms of any third party.</p>
+
+    <h2>5. No warranty</h2>
+    <p>The app is provided <strong>“as is” and “as available”, without warranties of any kind</strong>, express or implied, including merchantability, fitness for a particular purpose, and non-infringement. We don't warrant that the app will be uninterrupted, error-free, or that results will be accurate or reliable.</p>
+
+    <h2>6. Limitation of liability</h2>
+    <p>To the maximum extent permitted by law, we will not be liable for any indirect, incidental, special, consequential, or punitive damages, or for any loss of data, profits, or goodwill, arising from your use of (or inability to use) the app — even if advised of the possibility. Since the app is free, our total liability is limited to the amount you paid for it, which is zero.</p>
+
+    <h2>7. Updates</h2>
+    <p>The app may check for new versions and let you know when an update is available. New versions may add, change, or remove features.</p>
+
+    <h2>8. Termination</h2>
+    <p>You may stop using the app at any time by deleting it. We may discontinue the app or these terms; the disclaimers and liability limits above survive termination.</p>
+
+    <h2>9. Changes to these terms</h2>
+    <p>We may update these terms; the date above reflects the latest version. Continuing to use the app after changes means you accept them.</p>
+
+    <h2>10. Governing law</h2>
+    <p>These terms are governed by the laws of the Republic of Türkiye, without regard to conflict-of-law rules.</p>
+
+    <h2>11. Contact</h2>
+    <p>Questions about these terms? Email <a href="mailto:hello@slashbar.app">hello@slashbar.app</a>.</p>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap row">
+    <a class="logo" href="/" style="font-size:16px"><span class="mark" style="width:20px;height:20px"><span style="font-size:13px">/</span></span> slashbar</a>
+    <span class="mono">© 2026 · built for macOS in Swift</span>
+    <nav><a href="/">home</a><a href="/actions">actions</a><a href="/privacy">privacy</a><a href="/terms">terms</a></nav>
+  </div>
+</footer>
+</body>
+</html>
