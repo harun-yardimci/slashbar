@@ -75,7 +75,7 @@
 
   /* ---------- hero ---------- */
   .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
-  .hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding:74px 0 86px}
+  .hero .grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;padding-block:74px 86px}
   .hero h1{font-size:clamp(44px,6.4vw,86px);line-height:.95;letter-spacing:-.035em;font-weight:700;margin:18px 0 0}
   .hero h1 .ser{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-style:italic;letter-spacing:-.01em}
   .hero h1 .big-slash{color:var(--violet);display:inline-block;transform:skewX(-9deg)}
@@ -178,7 +178,7 @@
   @media (max-width:760px){ .foot-grid{grid-template-columns:1fr 1fr;gap:28px} .foot-brand{grid-column:1/-1} }
 
   @media (max-width:900px){
-    .hero .grid{grid-template-columns:1fr;gap:46px;padding:54px 0 64px}
+    .hero .grid{grid-template-columns:1fr;gap:46px;padding-block:54px 64px}
     .device{justify-self:start;max-width:420px}
     .act-grid{grid-template-columns:1fr;gap:0}
     .tenets{grid-template-columns:1fr;gap:30px}
@@ -188,7 +188,7 @@
   @media (max-width:560px){
     .wrap{padding:0 22px}
     .hero h1{font-size:clamp(38px,11.5vw,54px)}
-    .hero .grid{padding:38px 0 50px;gap:36px}
+    .hero .grid{padding-block:38px 50px;gap:36px}
     .lede{font-size:17px;max-width:none}
     .device{max-width:100%}
     .sec-head{flex-direction:column;gap:8px}
