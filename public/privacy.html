@@ -4,8 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.telemetrydeck.com/websdk/telemetrydeck.min.js" data-app-id="46811169-3428-4BEC-9B06-6DA37445E1C1"></script>
+<!-- Cookie consent — must run before gtag.js to set the Consent Mode default -->
+<script src="/consent.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D9Z3EL24HD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D9Z3EL24HD');
+</script>
 <title>Privacy Policy · Slashbar</title>
-<meta name="description" content="Slashbar is a local-first macOS app. Privacy-friendly analytics measure anonymous usage without collecting your content or personal data.">
+<meta name="description" content="Slashbar is a local-first macOS app. We measure anonymous app usage and website traffic without collecting your content or personal data.">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -69,19 +79,19 @@
   <div class="head">
     <div class="eyebrow">Legal</div>
     <h1>Privacy <span class="s">/</span> Policy</h1>
-    <p class="updated">Last updated: 8 July 2026</p>
+    <p class="updated">Last updated: 19 July 2026</p>
   </div>
 
   <main>
     <div class="tldr">
-      <p><strong>The short version:</strong> Slashbar runs locally on your Mac and has no account system. We use privacy-friendly TelemetryDeck analytics to count anonymous app launches and website visits. We never send the text you type or copy, your files, integration data, or other content.</p>
+      <p><strong>The short version:</strong> Slashbar runs locally on your Mac and has no account system. The app sends anonymous launch counts to TelemetryDeck; this website measures traffic with Google Analytics. We never send the text you type or copy, your files, integration data, or other content.</p>
     </div>
 
     <h2>Who we are</h2>
     <p>Slashbar is a macOS application made by Harun Yardımcı (“we”, “us”). You can reach us at <a href="mailto:hello@slashbar.app">hello@slashbar.app</a>.</p>
 
     <h2>What we collect</h2>
-    <p>We collect a small amount of anonymous usage data through TelemetryDeck: app launches, website page views, app version, operating system version, and device class. TelemetryDeck processes this data without advertising cookies or cross-site tracking. We do not send names, email addresses, the text you type or copy, files, clipboard contents, AI prompts, integration data, or persistent hardware identifiers.</p>
+    <p>From the app, we collect a small amount of anonymous usage data through TelemetryDeck: app launches, app version, operating system version, and device class. TelemetryDeck processes this data without advertising cookies or cross-site tracking. From the website, we collect traffic data through Google Analytics — see <a href="#this-website">This website</a> below. We do not send names, email addresses, the text you type or copy, files, clipboard contents, AI prompts, integration data, or persistent hardware identifiers.</p>
 
     <h2>What stays on your device</h2>
     <p>Everything Slashbar remembers lives locally on your Mac and never leaves it through us:</p>
@@ -100,8 +110,8 @@
     <h2>Network connections</h2>
     <p>Slashbar sends anonymous app-launch analytics to TelemetryDeck and makes one housekeeping request to GitHub for the latest released version number. All other network activity is to the AI providers or services you explicitly use.</p>
 
-    <h2>This website</h2>
-    <p>slashbar.app is a static site hosted on Cloudflare and uses TelemetryDeck to count anonymous page views without analytics or advertising cookies. TelemetryDeck's processing is described in its <a href="https://telemetrydeck.com/privacy/">privacy policy</a>. As the network host, Cloudflare may process basic request information (such as IP address) to deliver and protect the site, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>. App downloads are served from GitHub Releases, subject to <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>.</p>
+    <h2 id="this-website">This website</h2>
+    <p>slashbar.app is a static site hosted on Cloudflare. It measures traffic two ways. TelemetryDeck counts anonymous page views without cookies; its processing is described in its <a href="https://telemetrydeck.com/privacy/">privacy policy</a>. Google Analytics 4 measures visits in more detail: it sets first-party cookies in your browser (named <code>_ga</code> and <code>_ga_*</code>) to recognise returning visits, and records your approximate location derived from your IP address, your device and browser, how you arrived at the site, and the pages, scrolls and outbound links you interact with. We do not use Google Analytics for advertising or ad personalisation. Google's handling of this data is described in its <a href="https://policies.google.com/privacy">privacy policy</a> and in <a href="https://policies.google.com/technologies/partner-sites">how Google uses data from sites that use its services</a>. As the network host, Cloudflare may process basic request information (such as IP address) to deliver and protect the site, under <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare's privacy policy</a>. App downloads are served from GitHub Releases, subject to <a href="https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement">GitHub's privacy statement</a>.</p>
 
     <h2>Children</h2>
     <p>Slashbar is a general-purpose developer tool and is not directed at children under 13.</p>
