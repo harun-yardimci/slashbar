@@ -19,6 +19,7 @@
     analytics_storage: stored === 'granted' ? 'granted' : 'denied'
   });
 
+  if (stored === 'denied') clearGaCookies();  // returning decliner — keep it clean
   if (stored) return;                         // already answered — no banner
 
   var CSS = [
@@ -45,9 +46,29 @@
     '@media (prefers-reduced-motion:reduce){#sb-consent,#sb-consent button{transition:none}}'
   ].join('');
 
+  /* Consent Mode stops GA from writing new cookies, but any _ga cookie set on an
+     earlier visit survives for ~2 years. Declining has to clear those too. The
+     domain GA used isn't knowable from here, so expire the name against every
+     candidate: host-only, the host, and each parent domain. */
+  function clearGaCookies() {
+    var host = location.hostname;
+    var domains = [''], parts = host.split('.'), i;
+    for (i = 0; i < parts.length - 1; i++) domains.push('.' + parts.slice(i).join('.'));
+    domains.push(host);
+    document.cookie.split('; ').forEach(function (c) {
+      var name = c.split('=')[0];
+      if (name.indexOf('_ga') !== 0) return;
+      domains.forEach(function (d) {
+        document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' +
+          (d ? '; domain=' + d : '');
+      });
+    });
+  }
+
   function decide(choice) {
     try { localStorage.setItem(KEY, choice); } catch (e) {}
     gtag('consent', 'update', { analytics_storage: choice });
+    if (choice === 'denied') clearGaCookies();
     var el = document.getElementById('sb-consent');
     if (!el) return;
     el.className = 'out';
