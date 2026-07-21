@@ -76,6 +76,13 @@
   .rel-body code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel);
     border:1px solid var(--line);border-radius:5px;padding:1px 5px}
   .rel-body strong{font-weight:700}
+  .rel-file{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);
+    font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--soft);
+    display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .rel-file a{color:var(--soft)} .rel-file a:hover{color:var(--ink)}
+  .rel-file .hash{cursor:pointer;background:var(--panel);border:1px solid var(--line);border-radius:5px;
+    padding:1px 7px;max-width:100%;overflow-wrap:anywhere}
+  .rel-file .hash:hover{border-color:var(--violet);color:var(--ink)}
   .state{border:1px dashed var(--line);border-radius:14px;background:var(--panel);
     padding:26px 28px;font-family:"JetBrains Mono",monospace;font-size:13.5px;color:var(--soft)}
   .ghlink{margin:26px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
@@ -174,6 +181,16 @@
       var ver = r.tag_name;
       var title = (r.name || "").replace(/^v?[\d.]+\s*[—–-]\s*/, "");
       if (title === r.name && /^Slashbar\s/.test(title)) title = "";
+      var dmg = (r.assets || []).filter(function(a){ return /\.dmg$/i.test(a.name); })[0];
+      var fileRow = "";
+      if (dmg) {
+        var mb = (dmg.size / 1048576).toFixed(1);
+        var sha = dmg.digest && dmg.digest.indexOf("sha256:") === 0 ? dmg.digest.slice(7) : null;
+        fileRow = '<div class="rel-file"><a href="' + esc(dmg.browser_download_url) +
+          '" rel="noopener">' + esc(dmg.name) + "</a><span>· " + mb + " MB</span>" +
+          (sha ? '<span>· sha256</span><span class="hash" title="Click to copy" data-sha="' +
+            esc(sha) + '">' + esc(sha) + "</span>" : "") + "</div>";
+      }
       var card = document.createElement("article");
       card.className = "release";
       card.innerHTML =
@@ -181,10 +198,26 @@
         (i === 0 ? '<span class="latest">Latest</span>' : "") +
         '<span class="date">' + esc(fmtDate(r.published_at)) + "</span></div>" +
         (title ? '<div class="rel-title">' + esc(title) + "</div>" : "") +
-        '<div class="rel-body">' + render(r.body || "") + "</div>";
+        '<div class="rel-body">' + render(r.body || "") + "</div>" + fileRow;
       list.appendChild(card);
     });
     if (!list.children.length) throw new Error("empty");
+    list.addEventListener("click", function(e){
+      var el = e.target.closest(".hash");
+      if (!el) return;
+      var selectHash = function(){
+        var range = document.createRange();
+        range.selectNodeContents(el);
+        var sel = window.getSelection();
+        sel.removeAllRanges(); sel.addRange(range);
+      };
+      if (!navigator.clipboard) { selectHash(); return; }
+      navigator.clipboard.writeText(el.getAttribute("data-sha")).then(function(){
+        var t = el.textContent;
+        el.textContent = "copied ✓";
+        setTimeout(function(){ el.textContent = t; }, 1200);
+      }).catch(selectHash);
+    });
   }).catch(function(){
     document.getElementById("state").innerHTML =
       'Couldn’t load release notes right now — they’re always on ' +
