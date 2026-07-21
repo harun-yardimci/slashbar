@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.telemetrydeck.com/websdk/telemetrydeck.min.js" data-app-id="46811169-3428-4BEC-9B06-6DA37445E1C1"></script>
+<!-- Cookie consent — must run before gtag.js to set the Consent Mode default -->
+<script src="/consent.js"></script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D9Z3EL24HD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D9Z3EL24HD');
+</script>
+<title>Changelog · Slashbar</title>
+<meta name="description" content="What's new in Slashbar — release notes for every version of the macOS command bar.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="theme-color" content="#5B3DF5">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{ --paper:#FBFAF5; --ink:#111110; --soft:#56544D; --line:#E2DFD4; --violet:#5B3DF5; --panel:#F3F1E9; }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;line-height:1.65;overflow-x:hidden}
+  a{color:var(--violet);text-decoration:none} a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px}
+  .col{max-width:760px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  header.bar{position:sticky;top:0;z-index:50;background:rgba(251,250,245,.85);
+    backdrop-filter:saturate(1.2) blur(10px);border-bottom:1px solid var(--line)}
+  .bar .row{display:flex;align-items:center;gap:24px;height:56px}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:-.02em;font-size:18px;color:var(--ink)}
+  .logo .mark{width:24px;height:24px;border-radius:7px;background:linear-gradient(135deg,#6D5BF8,#A855F7);
+    display:grid;place-items:center;color:#fff}
+  .logo .mark span{transform:skewX(-12deg);font-family:"JetBrains Mono",monospace;font-size:15px;margin-top:-1px}
+  nav.top{margin-left:auto;display:flex;gap:22px;align-items:center}
+  nav.top a{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+  nav.top a:hover{color:var(--ink);text-decoration:none}
+  .btn{display:inline-flex;align-items:center;gap:9px;font-family:"JetBrains Mono",monospace;font-size:13px;
+    font-weight:500;padding:9px 15px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);
+    transition:transform .12s ease, box-shadow .12s ease}
+  .btn:hover{transform:translateY(-1px);box-shadow:4px 4px 0 var(--violet);text-decoration:none}
+  .head{padding:60px 0 8px}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--soft)}
+  h1{font-size:clamp(36px,5vw,56px);line-height:1;letter-spacing:-.035em;font-weight:700;margin:14px 0 0}
+  h1 .s{color:var(--violet);display:inline-block;transform:skewX(-9deg)}
+  .sub{margin:14px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+  main{padding:28px 0 10px}
+
+  .release{position:relative;border:1px solid var(--line);border-radius:14px;background:#fff;
+    padding:24px 28px 20px;margin:0 0 22px}
+  .rel-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .ver{font-family:"JetBrains Mono",monospace;font-size:15px;font-weight:500;color:var(--violet)}
+  .latest{font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;
+    color:#fff;background:var(--violet);border-radius:999px;padding:3px 9px}
+  .date{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--soft)}
+  .rel-title{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:8px 0 0}
+  .rel-body{margin-top:6px}
+  .rel-body h2{font-size:13px;font-family:"JetBrains Mono",monospace;font-weight:500;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--soft);margin:18px 0 4px}
+  .rel-body p,.rel-body li{font-size:15.5px;color:#26251f;margin:8px 0}
+  .rel-body ul{padding-left:20px;margin:8px 0} .rel-body li{margin:5px 0}
+  .rel-body code{font-family:"JetBrains Mono",monospace;font-size:.88em;background:var(--panel);
+    border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+  .rel-body strong{font-weight:700}
+  .state{border:1px dashed var(--line);border-radius:14px;background:var(--panel);
+    padding:26px 28px;font-family:"JetBrains Mono",monospace;font-size:13.5px;color:var(--soft)}
+  .ghlink{margin:26px 0 0;font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--soft)}
+
+  footer{border-top:1px solid var(--line);margin-top:54px;padding:34px 0}
+  footer .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+  footer .mono{font-size:12.5px;color:var(--soft)}
+  footer nav{margin-left:auto;display:flex;gap:20px}
+  footer nav a{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--soft)}
+  footer nav a:hover{color:var(--ink);text-decoration:none}
+  @media (max-width:540px){ .wrap{padding:0 22px} nav.top a:not(.btn){display:none}
+    .release{padding:20px 20px 16px} .date{margin-left:0;width:100%} }
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap row">
+    <a class="logo" href="/"><span class="mark"><span>/</span></span> slashbar</a>
+    <nav class="top"><a href="/">home</a><a href="/actions">actions</a><a class="btn" href="/download">Download</a></nav>
+  </div>
+</header>
+
+<div class="wrap col">
+  <div class="head">
+    <div class="eyebrow">Release notes</div>
+    <h1>What's <span class="s">/</span> new</h1>
+    <p class="sub">Every Slashbar release, newest first. Updates install with one click from the app.</p>
+  </div>
+
+  <main>
+    <div id="list"><div class="state" id="state">Loading releases…</div></div>
+    <noscript><div class="state">JavaScript is off — read the notes on
+      <a href="https://github.com/harun-yardimci/slashbar/releases">GitHub Releases</a>.</div></noscript>
+    <p class="ghlink">Also on <a href="https://github.com/harun-yardimci/slashbar/releases">GitHub Releases</a> ·
+      update from inside the app or <a href="/download">download the latest</a>.</p>
+  </main>
+</div>
+
+<footer>
+  <div class="wrap row">
+    <a class="logo" href="/" style="font-size:16px"><span class="mark" style="width:20px;height:20px"><span style="font-size:13px">/</span></span> slashbar</a>
+    <span class="mono">© 2026 · built for macOS in Swift</span>
+    <nav><a href="/">home</a><a href="/actions">actions</a><a href="/privacy">privacy</a><a href="/terms">terms</a></nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var esc = function(s){ return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); };
+
+  // Minimal, safe markdown for our own release notes: everything is escaped
+  // first, then a small set of patterns is allowed back in.
+  function inline(s){
+    return s
+      .replace(/`([^`]+)`/g, function(_, c){ return "<code>" + c + "</code>"; })
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2" rel="noopener">$1</a>')
+      .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" rel="noopener">$2</a>');
+  }
+  function render(md){
+    // Drop the boilerplate install section — the page has its own links.
+    md = md.replace(/\r/g, "");
+    var cut = md.search(/^## Install\s*$/m);
+    if (cut > -1) md = md.slice(0, cut);
+    var out = [], list = null;
+    md.split("\n").forEach(function(line){
+      var t = line.trim();
+      if (/^- /.test(t)) {
+        if (!list) { list = []; }
+        list.push("<li>" + inline(esc(t.slice(2))) + "</li>");
+        return;
+      }
+      if (list) { out.push("<ul>" + list.join("") + "</ul>"); list = null; }
+      if (!t) return;
+      if (/^##+ /.test(t)) { out.push("<h2>" + inline(esc(t.replace(/^#+\s*/, ""))) + "</h2>"); return; }
+      out.push("<p>" + inline(esc(t)) + "</p>");
+    });
+    if (list) out.push("<ul>" + list.join("") + "</ul>");
+    return out.join("");
+  }
+  function fmtDate(iso){
+    try {
+      return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    } catch (e) { return iso.slice(0, 10); }
+  }
+
+  fetch("https://api.github.com/repos/harun-yardimci/slashbar/releases?per_page=50", {
+    headers: { Accept: "application/vnd.github+json" }
+  }).then(function(r){
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    return r.json();
+  }).then(function(rels){
+    var list = document.getElementById("list");
+    list.innerHTML = "";
+    rels.filter(function(r){ return !r.draft && !r.prerelease; }).forEach(function(r, i){
+      var ver = r.tag_name;
+      var title = (r.name || "").replace(/^v?[\d.]+\s*[—–-]\s*/, "");
+      if (title === r.name && /^Slashbar\s/.test(title)) title = "";
+      var card = document.createElement("article");
+      card.className = "release";
+      card.innerHTML =
+        '<div class="rel-head"><span class="ver">' + esc(ver) + "</span>" +
+        (i === 0 ? '<span class="latest">Latest</span>' : "") +
+        '<span class="date">' + esc(fmtDate(r.published_at)) + "</span></div>" +
+        (title ? '<div class="rel-title">' + esc(title) + "</div>" : "") +
+        '<div class="rel-body">' + render(r.body || "") + "</div>";
+      list.appendChild(card);
+    });
+    if (!list.children.length) throw new Error("empty");
+  }).catch(function(){
+    document.getElementById("state").innerHTML =
+      'Couldn’t load release notes right now — they’re always on ' +
+      '<a href="https://github.com/harun-yardimci/slashbar/releases">GitHub Releases</a>.';
+  });
+})();
+</script>
+</body>
+</html>
