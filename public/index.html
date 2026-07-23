@@ -164,6 +164,11 @@
   .tenet .n{font-family:"JetBrains Mono",monospace;color:#7C6AE0;font-size:13px}
   .tenet h4{margin:10px 0 8px;font-size:19px;font-weight:500;letter-spacing:-.01em}
   .tenet p{margin:0;color:var(--on-dark-soft);font-size:14.5px;line-height:1.55}
+  .ai-setup{margin-top:56px;border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:26px 28px;position:relative;z-index:2}
+  .ai-setup .eyebrow{color:#A78BFA;margin-bottom:14px}
+  .ai-setup p{margin:10px 0 0;color:var(--on-dark-soft);font-size:14.5px;line-height:1.6;max-width:75ch}
+  .ai-setup b{color:#fff;font-weight:500}
+  .ai-setup code{font-family:"JetBrains Mono",monospace;font-size:13px;color:#C4B5FD;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:5px}
 
   /* ---------- marquee ---------- */
   .strip{border-bottom:1px solid var(--line);overflow:hidden;background:var(--panel)}
@@ -325,6 +330,12 @@
       <div class="tenet"><div class="n">01</div><h4>Your subscription, your tokens</h4><p>It drives the CLIs you've already logged into — Claude, Codex, Gemini — and falls back to on-device Foundation Models. We never see a prompt.</p></div>
       <div class="tenet"><div class="n">02</div><h4>Local-first, by default</h4><p>Native SwiftUI. Real window vibrancy, a Carbon global hotkey, no Accessibility prompt. Tokens live in the Keychain. No backend, ever.</p></div>
       <div class="tenet"><div class="n">03</div><h4>The field is the input</h4><p>Type or paste anything — content-aware ranking puts the right action first. Press <span class="mono" style="color:#C4B5FD">Tab</span> to search 200+ actions by name.</p></div>
+    </div>
+    <div class="ai-setup" id="ai-setup">
+      <div class="eyebrow">Set it up — in about a minute</div>
+      <p><b>Already pay for Claude, ChatGPT or Gemini?</b> Install its CLI — <code>claude</code>, <code>codex</code> or <code>gemini</code> — and sign in once in Terminal. Slashbar detects it automatically; switch providers any time from the chip in the palette footer, or in Settings&nbsp;→&nbsp;AI&nbsp;provider.</p>
+      <p><b>On an Apple Silicon Mac running macOS&nbsp;26+?</b> Apple&nbsp;Intelligence answers on-device — nothing to install, nothing leaves your Mac. (This is what "on-device" means here; it isn't available on Intel or older macOS.)</p>
+      <p><b>Neither?</b> Pick <b>Manual browser</b>: Slashbar builds the prompt, copies it, and opens the AI chat of your choice — paste and go. Translate actions even fall back to Google&nbsp;Translate on their own, so they work with zero setup.</p>
     </div>
   </div>
 </section>
